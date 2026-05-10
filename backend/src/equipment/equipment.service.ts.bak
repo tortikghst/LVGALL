@@ -1,0 +1,69 @@
+
+import { Injectable } from '@nestjs/common';
+
+import { PrismaService } from '../prisma/prisma.service';
+
+
+
+@Injectable()
+
+export class EquipmentService {
+
+  constructor(private prisma: PrismaService) {}
+
+
+
+  async findAll(filters?: any) {
+
+    // Игнорируем фильтры, просто возвращаем всё оборудование
+
+    return this.prisma.equipment.findMany();
+
+  }
+
+
+
+  async findOne(id: string) {
+
+    return this.prisma.equipment.findUnique({ where: { id } });
+
+  }
+
+
+
+  async create(data: any) {
+
+    return this.prisma.equipment.create({ data });
+
+  }
+
+
+
+  async update(id: string, data: any) {
+
+    return this.prisma.equipment.update({ where: { id }, data });
+
+  }
+
+
+
+  async remove(id: string) {
+
+    return this.prisma.equipment.delete({ where: { id } });
+
+  }
+
+
+
+  async findRandom(limit: number = 6) {
+
+    const count = await this.prisma.equipment.count();
+
+    const skip = Math.max(0, Math.floor(Math.random() * count));
+
+    return this.prisma.equipment.findMany({ take: Number(limit), skip });
+
+  }
+
+}
+
